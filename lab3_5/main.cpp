@@ -9,7 +9,9 @@ int main()
 	DirectedGraph<int> g;// = new DirectedGraph<int>();
 	g.add_edge(2, 3);
 	g.add_edge(3, 4);
-	for (DirectedGraph<int>::DFSIterator it = g.begin(2); it != g.end(); it++)
+	g.add_edge(2, 5);
+	g.add_edge(4, 5);
+	for (DirectedGraph<int>::DFSIterator it = g.begin(2); it != g.end(); ++it)
 	{
 		cout << "out: " << *it << endl;
 	}
