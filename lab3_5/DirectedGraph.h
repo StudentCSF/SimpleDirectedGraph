@@ -66,7 +66,7 @@ public:
 	{
 		//TODO
 	}
-
+	/*
 public:
 	class DFSIterator
 	{
@@ -146,6 +146,105 @@ public:
 	};
 
 	
+	DFSIterator begin(T start) const
+	{
+		return DFSIterator(this->g, start);
+	}
+
+	DFSIterator end() const
+	{
+		return DFSIterator();
+	}*/
+
+public:
+	class DFSIterator
+	{
+		friend class DirectedGraph;
+
+	private:
+		stack<T> stack;
+		unordered_set<T> visited;
+		unordered_map<T, unordered_set<T>*>* map;
+
+		DFSIterator()
+		{
+			empty();
+		}
+
+		DFSIterator(unordered_map<T, unordered_set<T>*>* map, T v)
+		{
+			if (map->contains(v)) {
+				this->stack.push(v);
+				visited.insert(v);
+				this->map = map;
+			}
+			else {
+				empty();
+			}
+		}
+
+	private:
+		void empty()
+		{
+			this->map = nullptr;
+			this->stack.push(NULL);
+		}
+
+		void update(T curr)
+		{
+			if (this->map->contains(curr)) {
+				unordered_set<T>* set = this->map->at(curr);
+				for (typename unordered_set<T>::iterator it = set->begin(); it != set->end(); it++)
+				{
+					if (!this->visited.contains(*it))
+					{
+						visited.insert(*it);
+						this->stack.push(*it);
+					}
+				}
+			}
+			if (this->stack.empty()) {
+				stack.push(NULL);
+			}
+		}
+
+	public:
+		DFSIterator& operator++()
+		{
+			T curr = stack.top();
+			stack.pop();
+			//visited.insert(curr);
+			this->update(curr);
+			return *this;
+		}
+
+		DFSIterator operator++(int)
+		{
+			DFSIterator copy = *this;
+			T curr = stack.top();
+			stack.pop();
+			//visited.insert(curr);
+			this->update(curr);
+			return copy;
+		}
+
+		T operator*() const
+		{
+			return this->stack.top();
+		}
+
+		friend bool operator==(const DirectedGraph<T>::DFSIterator& i1, const DirectedGraph<T>::DFSIterator& i2)
+		{
+			return i1.stack.top() == i2.stack.top();
+		}
+
+		friend bool operator!=(const DirectedGraph<T>::DFSIterator& i1, const DirectedGraph<T>::DFSIterator& i2)
+		{
+			return i1.stack.top() != i2.stack.top();
+		}
+	};
+
+
 	DFSIterator begin(T start) const
 	{
 		return DFSIterator(this->g, start);
