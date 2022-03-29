@@ -10,13 +10,6 @@ template<class T>
 class DirectedGraph
 {
 
-
-	/* TODO_list
-	* vector<T> bfs(T start)
-	* vector<T> dfs(T start)
-	* ???
-	*/
-
 private:
 	unordered_map<T, unordered_set<T>*>* g;
 
@@ -28,7 +21,7 @@ public:
 
 	~DirectedGraph()
 	{
-		for (typename unordered_map<T, unordered_set<T>*>::iterator it = g->begin(); it != g->end();)
+		for (typename unordered_map<T, unordered_set<T>*>::iterator it = this->g->begin(); it != this->g->end();)
 		{
 			unordered_set<T>* tmp = it->second;
 			for (typename unordered_set<T>::iterator it2 = tmp->begin(); it2 != tmp->end();)
@@ -62,99 +55,32 @@ public:
 		}
 	}
 
-	void removeVertex(T v)
+	void remove_vertex(T v)
 	{
-		//TODO
-	}
-	/*
-public:
-	class DFSIterator
-	{
-		friend class DirectedGraph;
-
-	private:
-		T curr;
-		stack<T> stack;
-		unordered_set<T> visited;
-		unordered_map<T, unordered_set<T>*>* map;
-
-		DFSIterator()
+		for (typename unordered_map<T, unordered_set<T>*>::iterator it = this->g->begin(); it != this->g->end();)// ++it)
 		{
-			this->map = nullptr;
-			this->curr = NULL;
-		}
-
-		DFSIterator(unordered_map<T, unordered_set<T>*>* map, T v)
-		{
-			this->stack.push(v);
-			this->curr = v;
-			this->map = map;
-		}
-
-	private:
-		void update()
-		{
-			if (this->map->contains(this->curr)) {
-				unordered_set<T>* set = this->map->at(this->curr);
-				for (typename unordered_set<T>::iterator it = set->begin(); it != set->end(); it++)
+			if (it->first == v)
+			{
+				this->g->erase(it++);
+			}
+			else
+			{
+				for (typename unordered_set<T>::iterator it2 = it->second->begin(); it2 != it->second->end();)// ++it2)
 				{
-					if (!this->visited.contains(*it))
+					if (*it2 == v)
 					{
-						this->stack.push(*it);
+						it->second->erase(it2++);
+					}
+					else
+					{
+						it2++;
 					}
 				}
-			}
-			if (this->stack.empty()) {
-				stack.push(NULL);
+				it++;
 			}
 		}
-
-	public:
-		DFSIterator& operator++()
-		{
-			stack.pop();
-			visited.insert(this->curr);
-			this->update();
-			this->curr = stack.top();
-			return *this;
-		}
-		
-		DFSIterator operator++(int)
-		{
-			DFSIterator copy = *this;
-			visited.insert(stack.top());
-			this->curr = stack.top();
-			stack.pop();
-			this->update();
-			return copy;
-		}
-		
-		T operator*() const
-		{
-			return this->stack.top();
-		}
-
-		friend bool operator==(const DirectedGraph<T>::DFSIterator& i1, const DirectedGraph<T>::DFSIterator& i2)
-		{
-			return i1.curr == i2.curr;
-		}
-
-		friend bool operator!=(const DirectedGraph<T>::DFSIterator& i1, const DirectedGraph<T>::DFSIterator& i2)
-		{
-			return i1.curr != i2.curr;
-		}
-	};
-
-	
-	DFSIterator begin(T start) const
-	{
-		return DFSIterator(this->g, start);
 	}
-
-	DFSIterator end() const
-	{
-		return DFSIterator();
-	}*/
+	
 
 public:
 	class DFSIterator
@@ -174,7 +100,9 @@ public:
 		DFSIterator(unordered_map<T, unordered_set<T>*>* map, T v)
 		{
 			if (map->contains(v)) {
+				//cout << v << "  - asdasda" << endl;
 				this->stack.push(v);
+				//cout << stack.top() << "  - aaaa" << endl;
 				visited.insert(v);
 				this->map = map;
 			}
@@ -254,5 +182,4 @@ public:
 	{
 		return DFSIterator();
 	}
-	
 };
