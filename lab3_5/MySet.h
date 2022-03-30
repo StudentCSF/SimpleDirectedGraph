@@ -8,12 +8,15 @@ private:
 	T* ptr;
 	size_t sz;
 
+	size_t capacity;
+
 public:
 	MySet() : MySet(1024) {}
 
-	MySet(const int capacity)
+	MySet(const size_t capacity)
 	{
-		this->ptr = new T[capacity];
+		this->capacity = capacity;
+		this->ptr = new T[this->capacity];
 		this->sz = 0;
 	}
 
@@ -107,10 +110,28 @@ public:
 		return Iterator(&tmp);
 	}
 
-	/*
+	
 	Iterator erase(Iterator _where)
 	{
-		delete _where;
+		T* new_ptr = new T[this->capacity];
+		unsigned int i = 0;
+		for (Iterator it = this->begin(); it != _where; it++, i++)
+		{
+			*(new_ptr + i) = *it;
+
+		}
+		unsigned int ind = i;
+		_where++;
+		for (Iterator it = _where; it != this->end(); it++, i++)
+		{
+			*(new_ptr + i) = *it;
+		}
+		sz--;
+		this->ptr = new_ptr;
+		i = 0;
+		Iterator it = this->begin();
+		for (; i < ind; it++, i++) {}
+		return it;
 	}
-	*/
+	
 };
