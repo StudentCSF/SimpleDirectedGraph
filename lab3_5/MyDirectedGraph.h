@@ -143,14 +143,64 @@ public:
 
 	void remove_edge(T from, T to)
 	{
-
+		Vertex* pfv = this->find_from_vertex(from);
+		if (pfv)
+		{
+			for (typename MySet<Vertex*>::Iterator it = pfv->to_vertices->begin(); it != pfv->to_vertices->end(); it++)
+			{
+				Vertex* ptv = *it;
+				if (ptv->value == to)
+				{
+					pfv->to_vertices->erase(it);
+					break;
+				}
+			}
+			if (pfv->to_vertices->empty())
+			{
+				Vertex* ptv = this->find_to_vertex(from);
+				if (!ptv)
+				{
+					for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
+					{
+						Vertex* curr = *it;
+						if (curr->value == from)
+						{
+							this->from_vertices->erase(it);
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
-	/*
+	
 	void remove_vertex(T v)
 	{
-
+		for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
+		{
+			Vertex* pfv = *it;
+			if (pfv->value == v)
+			{
+				this->from_vertices->erase(it);
+			}
+			else
+			{
+				for (typename MySet<Vertex*>::Iterator it2 = pfv->to_vertices->begin(); it2 != pfv->to_vertices->end(); it2++)
+				{
+					Vertex* ptv = *it2;
+					if (ptv->value == v)
+					{
+						pfv->to_vertices->erase(it2);
+					}
+				}
+				if (pfv->to_vertices->empty())
+				{
+					this->from_vertices->erase(it);
+				}
+			}
+		}
 	}
-	*/
+	
 	size_t size()
 	{
 		MySet<Vertex*> all;

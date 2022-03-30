@@ -51,6 +51,11 @@ public:
 		return this->sz;
 	}
 
+	bool empty()
+	{
+		return this->sz == 0;
+	}
+
 	class Iterator
 	{
 		friend class MySet;

@@ -11,6 +11,7 @@ typedef unordered_map<int, unordered_set<int>*> IntMap;
 
 int main()
 {
+	/*
 	MySet<int> set2;
 	set2.add(1);
 	set2.add(2);
@@ -33,14 +34,18 @@ int main()
 	cout << set2.size();
 
 	if (true) return 0;
-
+	*/
 	MyDirectedGraph<int> mdg;
 	mdg.add_edge(1, 2);
 	mdg.add_edge(2, 3);
 	mdg.add_edge(1, 4);
 	mdg.add_edge(4, 1);
 	mdg.add_edge(5, 1);
+	cout << mdg.size() << endl << endl;
+	mdg.remove_vertex(4);
+	mdg.remove_vertex(1);
 	cout << mdg.size();
+
 
 	if (true) return 0;
 	//MyDirectedGraph<int> mdg;
