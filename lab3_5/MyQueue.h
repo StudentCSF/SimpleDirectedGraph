@@ -18,6 +18,12 @@ public:
 		this->head = ptr;
 	}
 
+	~MyQueue()
+	{
+		delete[] head;
+		delete[] ptr;
+	}
+
 	void add(T v)
 	{
 		*ptr = v;

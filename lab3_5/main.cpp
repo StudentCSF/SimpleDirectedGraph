@@ -12,6 +12,15 @@ typedef unordered_map<int, unordered_set<int>*> IntMap;
 int main()
 {
 	MyDirectedGraph<int> mdg;
+	mdg.add_edge(1, 2);
+	mdg.add_edge(2, 3);
+	mdg.add_edge(1, 4);
+	mdg.add_edge(4, 1);
+	mdg.add_edge(5, 1);
+	cout << mdg.size();
+
+	if (true) return 0;
+	//MyDirectedGraph<int> mdg;
 	MyStack<string>* s  = new MyStack<string>();
 	cout << s->empty() << endl;
 	s->push("2d");

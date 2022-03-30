@@ -6,7 +6,7 @@ class MySet
 
 private:
 	T* ptr;
-	int sz;
+	size_t sz;
 
 public:
 	MySet() : MySet(1024) {}
@@ -15,6 +15,11 @@ public:
 	{
 		this->ptr = new T[capacity];
 		this->sz = 0;
+	}
+
+	~MySet()
+	{
+		delete[] ptr;
 	}
 
 	void add(T v)
@@ -38,7 +43,7 @@ public:
 		return false;
 	}
 
-	int size()
+	size_t size()
 	{
 		return this->sz;
 	}
@@ -83,6 +88,11 @@ public:
 		{
 			return *it1.curr != *it2.curr;
 		}
+
+		Iterator& operator=(const Iterator& src)
+		{
+			return Iterator(src->curr);
+		}
 	};
 
 	Iterator begin()
@@ -96,4 +106,11 @@ public:
 		T tmp = *(this->ptr + add);
 		return Iterator(&tmp);
 	}
+
+	/*
+	Iterator erase(Iterator _where)
+	{
+		delete _where;
+	}
+	*/
 };

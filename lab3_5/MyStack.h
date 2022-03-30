@@ -19,6 +19,12 @@ public:
 		this->head = ptr;
 	}
 
+	~MyStack()
+	{
+		delete[] ptr;
+		delete[] head;
+	}
+
 	void push(T value)
 	{
 		this->head++;
