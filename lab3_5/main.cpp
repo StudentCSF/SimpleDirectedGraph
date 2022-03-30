@@ -42,7 +42,6 @@ int main()
 	mdg.add_edge(4, 1);
 	mdg.add_edge(5, 1);
 	cout << mdg.size() << endl << endl;
-	mdg.remove_vertex(4);
 	mdg.remove_vertex(1);
 	cout << mdg.size();
 
