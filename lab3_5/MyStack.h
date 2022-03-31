@@ -39,7 +39,7 @@ public:
 			this->head--;
 			return res;
 		}
-		//return NULL;
+		return this->top();
 	}
 
 	T top()

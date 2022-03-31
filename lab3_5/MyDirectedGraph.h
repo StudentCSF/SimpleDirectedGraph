@@ -1,12 +1,16 @@
 #pragma once
 
 #include "MySet.h"
+#include "MyStack.h"
+#include "MyQueue.h"
 
 
 template<class T>
 class MyDirectedGraph
 {
+
 private:
+
 	class Vertex
 	{
 	public:
@@ -17,6 +21,15 @@ private:
 		{
 			this->value = v;
 			this->to_vertices = new MySet<Vertex*>();
+		}
+
+		~Vertex()
+		{
+			for (typename MySet<Vertex*>::Iterator it = this->to_vertices->begin(); it != this->to_vertices->end(); )
+			{
+				this->remove_vertex(*it);
+			}
+			delete this->to_vertices;
 		}
 
 		bool operator==(const Vertex& v)
@@ -36,6 +49,8 @@ private:
 			return *this;
 		}
 	};
+
+private:
 
 	MySet<Vertex*>* from_vertices;
 
@@ -99,22 +114,22 @@ private:
 	}
 
 public:
+
 	MyDirectedGraph()
 	{
 		this->from_vertices = new MySet<Vertex*>();
 	}
-	/*
+	
 	~MyDirectedGraph()
 	{
-		for (MySet<Vertex>::Iterator it = this->from_vertices.begin(); it != this->from_vertices->end(); it++)
+		for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
 		{
-			for (MySet<Vertex>::Iterator it2 = it->to_vertices.begin(); it2 != it->to_vertices->end(); it2++)
-			{
-				delete it2->second
-			}
+			Vertex* v = *it;
+			this->remove_vertex(v->value);
 		}
+		delete this->from_vertices;
 	}
-	*/
+	
 	void add_edge(T from, T to)
 	{
 		if (!this->from_vertex_contains_to_vertex(from, to))
@@ -204,7 +219,6 @@ public:
 	size_t size()
 	{
 		MySet<Vertex*> all;
-		cout << this->from_vertices->size() << endl;
 		for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
 		{
 			Vertex* v = *it;
@@ -223,20 +237,117 @@ public:
 		return all.size();
 	}
 
-	T* adjacent_of(T v)
+public:
+
+	class Iterator
 	{
 
+	private:
+		Vertex** ptr;
+
+	public: 
+		Iterator(Vertex** ptr)
+		{
+			this->ptr = ptr;
+		}
+
+		T operator*() const
+		{
+			Vertex* v = *(this->ptr);
+			return v->value;
+		}
+		
+		virtual Iterator& operator++()
+		{
+			this->ptr++;
+			return *this;
+		}
+
+		virtual Iterator operator++(int)
+		{
+			Iterator copy = *this;
+			this->ptr++;
+			return copy;
+		}
+
+		friend bool operator==(const MyDirectedGraph<T>::Iterator& i1, const MyDirectedGraph<T>::Iterator& i2)
+		{
+			return *(i1.ptr) == *(i2.ptr);
+		}
+
+		friend bool operator!=(const MyDirectedGraph<T>::Iterator& i1, const MyDirectedGraph<T>::Iterator& i2)
+		{
+			return *(i1.ptr) != *(i2.ptr);
+		}
+	};
+
+	Iterator begin_bfs(T start)
+	{
+		Vertex* v = this->find_vertex(start);
+
+		MyQueue<Vertex*>* q = new MyQueue<Vertex*>();
+		MySet<Vertex*>* visited = new MySet<Vertex*>();
+
+		const size_t n = this->size() + 1;
+		Vertex** seq = new Vertex*[n];
+
+		q->push(v);
+		size_t i = 0;
+		while (!q->empty())
+		{
+			Vertex* curr = q->pop();
+			visited->add(curr);
+			*(seq + i) = curr;
+			i++;
+			for (typename MySet<Vertex*>::Iterator it = curr->to_vertices->begin(); it != curr->to_vertices->end(); it++)
+			{
+				if (!visited->contains(*it))
+				{
+					q->push(*it);
+				}
+			}
+		}
+		*(seq + i) = nullptr;
+
+		return Iterator(seq);
 	}
 
-	/*
-	* Iterator with:
-	* begin_bfs(T value	)
-	* begin_dfs(T value)
-	* 
-	* =
-	* ==
-	* 
-	*/
+	Iterator begin_dfs(T start) 
+	{
+		Vertex* v = this->find_vertex(start);
 
+		MyStack<Vertex*>* stack = new MyStack<Vertex*>();
+		MySet<Vertex*>* visited = new MySet<Vertex*>();
+
+		const size_t n = this->size() + 1;
+		Vertex** seq = new Vertex*[n];
+
+		stack->push(v);
+		visited->add(v);
+		size_t i = 0;
+		while (!stack->empty())
+		{
+			Vertex* curr = stack->pop();
+			*(seq + i) = curr;
+			i++;
+			for (typename MySet<Vertex*>::Iterator it = curr->to_vertices->begin(); it != curr->to_vertices->end(); it++)
+			{
+				if (!visited->contains(*it))
+				{
+					stack->push(*it);
+					visited->add(*it);
+				}
+			}
+		}
+		*(seq + i) = nullptr;
+		return Iterator(seq);
+	}
+
+	Iterator end()
+	{
+		Vertex** seq = new Vertex* [1];
+		*seq = nullptr;
+		return Iterator(seq);
+	}
 
 };

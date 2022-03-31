@@ -116,18 +116,18 @@ public:
 	}
 
 	
-	Iterator erase(Iterator _where)
+	Iterator erase(Iterator where_)
 	{
 		T* new_ptr = new T[this->capacity];
 		unsigned int i = 0;
-		for (Iterator it = this->begin(); it != _where; it++, i++)
+		for (Iterator it = this->begin(); it != where_; it++, i++)
 		{
 			*(new_ptr + i) = *it;
 
 		}
 		unsigned int ind = i;
-		_where++;
-		for (Iterator it = _where; it != this->end(); it++, i++)
+		where_++;
+		for (Iterator it = where_; it != this->end(); it++, i++)
 		{
 			*(new_ptr + i) = *it;
 		}

@@ -11,6 +11,37 @@ typedef unordered_map<int, unordered_set<int>*> IntMap;
 
 int main()
 {
+	MyDirectedGraph<int> g;// = new DirectedGraph<int>();
+	g.add_edge(1, 4);
+	g.add_edge(1, 5);
+	g.add_edge(4, 8);
+	g.add_edge(8, 7);
+	g.add_edge(5, 6);
+	g.add_edge(6, 4);
+	g.add_edge(7, 5);
+	g.add_edge(1, 7);
+	for (MyDirectedGraph<int>::Iterator it = g.begin_bfs(1); it != g.end(); ++it)
+	{
+		cout << "out: " << *it << endl;
+	}
+
+
+	//if (true) return 0;
+	MyDirectedGraph<string>* mg2 = new MyDirectedGraph<string>();
+	mg2->add_edge("1s", "4s");
+	mg2->add_edge("1s", "5s");
+	mg2->add_edge("4s", "8s");
+	mg2->add_edge("8s", "7s");
+	mg2->add_edge("5s", "6s");
+	mg2->add_edge("6s", "4s");
+	mg2->add_edge("7s", "5s");
+	mg2->add_edge("1s", "7s");
+	for (MyDirectedGraph<string>::Iterator it = mg2->begin_bfs("1s"); it != mg2->end(); ++it)
+	{
+		cout << "out: " << *it << endl;
+	}
+
+	if (true) return 0;
 	/*
 	MySet<int> set2;
 	set2.add(1);
@@ -72,22 +103,22 @@ int main()
 
 	MyQueue<int>* q = new MyQueue<int>();
 	cout << q->empty() << endl;
-	q->add(2);
-	q->add(3);
-	q->add(4);
-	cout << q->poll() << endl;
-	cout << q->poll() << endl;
-	cout << q->poll() << endl;
+	q->push(2);
+	q->push(3);
+	q->push(4);
+	cout << q->pop() << endl;
+	cout << q->pop() << endl;
+	cout << q->pop() << endl;
 	cout << q->empty() << endl;
 	cout << "---------------\n";
 	MyQueue<Test*>* q2 = new MyQueue<Test*>();
 	cout << q2->empty() << endl << endl;
-	q2->add(new Test(2));
-	q2->add(new Test(3));
-	q2->add(new Test(4));
-	cout << q2->poll()->v << endl;
-	cout << q2->poll()->v << endl;
-	cout << q2->poll()->v << endl << endl;
+	q2->push(new Test(2));
+	q2->push(new Test(3));
+	q2->push(new Test(4));
+	cout << q2->pop()->v << endl;
+	cout << q2->pop()->v << endl;
+	cout << q2->pop()->v << endl << endl;
 	cout << q2->empty();
 
 	cout << "\n\n\#########################n\n";

@@ -24,17 +24,22 @@ public:
 		delete[] ptr;
 	}
 
-	void add(T v)
+	void push(T v)
 	{
 		*ptr = v;
 		ptr++;
 	}
 
-	T poll()
+	T pop()
 	{
 		T res = *head;
 		head++;
 		return res;
+	}
+
+	T top()
+	{
+		return *head;
 	}
 
 	bool empty()
