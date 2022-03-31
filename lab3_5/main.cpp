@@ -23,8 +23,18 @@ int main()
 	{
 		cout << "out: " << *it << endl;
 	}
-	g.remove_vertex(6);
+	//g.remove_vertex(6);
 	cout << "--------\n";
+	g.remove_edge(1, 4);
+	g.remove_edge(1, 5);
+	g.remove_edge(4, 8);
+	g.remove_edge(8, 7);
+	g.remove_edge(5, 6);
+	g.remove_edge(6, 4);
+	g.remove_edge(7, 5);
+	g.remove_edge(1, 7);
+	g.remove_edge(6, 9);
+	//cout << "----------------------\n";
 	for (MyDirectedGraph<int>::Iterator it = g.begin_bfs(1); it != g.end(); ++it)
 	{
 		cout << "out: " << *it << endl;
@@ -47,12 +57,13 @@ int main()
 	{
 		cout << "out: " << *it << endl;
 	}
-	mg2->remove_vertex("6s");
+	//mg2->remove_vertex("6s");
 	cout << "--------\n";
 	for (MyDirectedGraph<string>::Iterator it = mg2->begin_bfs("1s"); it != mg2->end(); ++it)
 	{
 		cout << "out: " << *it << endl;
 	}
 	delete mg2;
+	cout << "\nEverything is OK!\n";
 	return 0;
 }

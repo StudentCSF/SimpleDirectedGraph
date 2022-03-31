@@ -25,7 +25,7 @@ private:
 
 		~Vertex()
 		{
-			std::cout << "r - " << this->value << "\n";
+			std::cout << "rm - " << this->value << "\n";
 			delete this->to_vertices;
 		}
 
@@ -82,12 +82,9 @@ public:
 		for (typename MySet<Vertex*>::Iterator it = all.begin(); it != all.end(); it++)
 		{
 			Vertex* curr = *it;
-			//for (typename MySet<Vertex*>)
 			all.erase(it);
 			delete curr;
 		}
-		
-		std::cout << this->size() << "da";
 		delete this->from_vertices;
 	}
 
@@ -203,12 +200,13 @@ public:
 	{
 		Vertex* v = this->find_from_vertex(from);
 		Vertex* v2 = this->find_to_vertex(to);
+
 		if (v && v2 && this->from_vertex_contains_to_vertex(from, to))
 		{
 			this->remove_edge(v, v2);
 		}
 	}
-
+	/*
 	void remove_vertex(T value)
 	{
 		Vertex* v = this->find_vertex(value);
@@ -217,11 +215,38 @@ public:
 			this->remove_vertex(v);
 		}
 	}
-
+	*/
 private:
 
 	void remove_edge(Vertex* from, Vertex* to)
 	{
+		for (typename MySet<Vertex*>::Iterator it = from->to_vertices->begin(); it != from->to_vertices->end(); it++)
+		{
+			if (to == *it)
+			{
+				from->to_vertices->erase(it);
+				break;
+			}
+		}
+		if (!this->find_vertex(to->value))
+		{
+			delete to;
+		}
+		if (from->to_vertices->empty())
+		{
+			for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
+			{
+				if (*it == from)
+				{
+					this->from_vertices->erase(it);
+				}
+			}
+			if (!this->find_to_vertex(from->value))
+			{
+				delete from;
+			}
+		}
+		/*
 		for (typename MySet<Vertex*>::Iterator it = from->to_vertices->begin(); it != from->to_vertices->end(); it++)
 		{
 			Vertex* curr = *it;
@@ -263,10 +288,11 @@ private:
 				delete from;
 			}
 		}
+		*/
 	}
-
+	/*
 	void remove_vertex(Vertex* v)
-	{
+	{*/
 		/*
 		T val = v->value;
 		for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
@@ -279,7 +305,7 @@ private:
 		}
 		if (this->find_vertex(val))
 		{
-		*/
+		*//*
 		MySet<Vertex*> buf;
 		for (typename MySet<Vertex*>::Iterator it = v->to_vertices->begin(); it != v->to_vertices->end(); it++)
 		{
@@ -338,6 +364,7 @@ private:
 				}
 			}
 		}
+		*/
 		/*
 		const size_t n = this->size() + 1;
 		MySet<Vertex*>* for_delete = new MySet<Vertex*>(n);
@@ -391,7 +418,7 @@ private:
 			delete curr;
 		}
 		*/
-	}
+	//}
 
 public:
 
@@ -437,7 +464,7 @@ public:
 		}
 	};
 
-	
+	/*
 	Iterator begin()
 	{
 		MySet<Vertex*> all;
@@ -466,11 +493,11 @@ public:
 		}
 		return seq;
 	}
-	
+	*/
 	Iterator begin_bfs(T start)
 	{
 		Vertex* v = this->find_vertex(start);
-
+		if (!v) return this->end();
 		MyQueue<Vertex*>* q = new MyQueue<Vertex*>();
 		MySet<Vertex*>* visited = new MySet<Vertex*>();
 
@@ -500,7 +527,7 @@ public:
 	Iterator begin_dfs(T start) 
 	{
 		Vertex* v = this->find_vertex(start);
-
+		if (!v) return this->end();
 		MyStack<Vertex*>* stack = new MyStack<Vertex*>();
 		MySet<Vertex*>* visited = new MySet<Vertex*>();
 
