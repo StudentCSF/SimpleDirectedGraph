@@ -20,8 +20,8 @@ public:
 
 	~MyQueue()
 	{
-		delete[] head;
-		delete[] ptr;
+		delete head;
+		delete ptr;
 	}
 
 	void push(T v)

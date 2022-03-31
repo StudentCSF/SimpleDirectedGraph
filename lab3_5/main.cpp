@@ -1,13 +1,12 @@
 #include <iostream>
 
-#include "DirectedGraph.h"
 #include "MyDirectedGraph.h"
 #include "MyStack.h"
 #include "Test.h"
 #include "MyQueue.h"
 #include "MySet.h"
 
-typedef unordered_map<int, unordered_set<int>*> IntMap;
+using namespace std;
 
 int main()
 {
@@ -20,13 +19,22 @@ int main()
 	g.add_edge(6, 4);
 	g.add_edge(7, 5);
 	g.add_edge(1, 7);
+	g.add_edge(6, 9);
+	for (MyDirectedGraph<int>::Iterator it = g.begin_bfs(1); it != g.end(); ++it)
+	{
+		cout << "out: " << *it << endl;
+	}
+	g.remove_vertex(6);
+	cout << "--------\n";
 	for (MyDirectedGraph<int>::Iterator it = g.begin_bfs(1); it != g.end(); ++it)
 	{
 		cout << "out: " << *it << endl;
 	}
 
+	cout << endl << g.size();
 
-	//if (true) return 0;
+
+	if (true) return 0;
 	MyDirectedGraph<string>* mg2 = new MyDirectedGraph<string>();
 	mg2->add_edge("1s", "4s");
 	mg2->add_edge("1s", "5s");
@@ -73,7 +81,7 @@ int main()
 	mdg.add_edge(4, 1);
 	mdg.add_edge(5, 1);
 	cout << mdg.size() << endl << endl;
-	mdg.remove_vertex(1);
+	//mdg.remove_vertex(1);
 	cout << mdg.size();
 
 

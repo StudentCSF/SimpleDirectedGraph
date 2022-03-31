@@ -22,7 +22,7 @@ public:
 
 	~MySet()
 	{
-		delete[] ptr;
+		delete ptr;
 	}
 
 	void add(T v)

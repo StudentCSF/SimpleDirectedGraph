@@ -20,9 +20,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DirectedGraph.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="MyDirectedGraph.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

@@ -25,10 +25,18 @@ private:
 
 		~Vertex()
 		{
-			for (typename MySet<Vertex*>::Iterator it = this->to_vertices->begin(); it != this->to_vertices->end(); )
+			std::cout << "r - " << this->value << "\n";
+			/*
+			for (typename MySet<Vertex*>::Iterator it = this->to_vertices->begin(); it != this->to_vertices->end(); it++)
 			{
-				this->remove_vertex(*it);
+				Vertex* curr = *it;
+				this->to_vertices->erase(it);
+				if (curr->to_vertices->empty())
+				{
+					delete curr;
+				}
 			}
+			*/
 			delete this->to_vertices;
 		}
 
@@ -50,9 +58,26 @@ private:
 		}
 	};
 
-private:
-
 	MySet<Vertex*>* from_vertices;
+
+public:
+
+	MyDirectedGraph()
+	{
+		this->from_vertices = new MySet<Vertex*>();
+	}
+
+	~MyDirectedGraph()
+	{
+		/*
+		Vertex* v = *this->from_vertices->begin();
+		for (typename MyDirectedGraph<T>::Iterator it = this->begin_bfs(v->value); it != this->end(); )
+		{
+			delete it;
+		}
+		*/
+		delete this->from_vertices;
+	}
 
 private:
 	
@@ -114,21 +139,6 @@ private:
 	}
 
 public:
-
-	MyDirectedGraph()
-	{
-		this->from_vertices = new MySet<Vertex*>();
-	}
-	
-	~MyDirectedGraph()
-	{
-		for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
-		{
-			Vertex* v = *it;
-			this->remove_vertex(v->value);
-		}
-		delete this->from_vertices;
-	}
 	
 	void add_edge(T from, T to)
 	{
@@ -156,6 +166,48 @@ public:
 		}
 	}
 
+	size_t size()
+	{
+		MySet<Vertex*> all;
+		for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
+		{
+			//Vertex* da = *it;
+			//std::cout << da->value;
+			Vertex* v = *it;
+			if (!all.contains(v))
+			{
+				all.add(v);
+			}
+			for (typename MySet<Vertex*>::Iterator it2 = v->to_vertices->begin(); it2 != v->to_vertices->end(); it2++)
+			{
+				if (!all.contains(*it2))
+				{
+					all.add(*it2);
+				}
+			}
+		}
+		return all.size();
+	}
+
+	void remove_edge(T from, T to)
+	{
+		Vertex* v = this->find_from_vertex(from);
+		Vertex* v2 = this->find_to_vertex(to);
+		if (v && v2 && this->from_vertex_contains_to_vertex(from, to))
+		{
+			this->remove_edge(v, v2);
+		}
+	}
+
+	void remove_vertex(T value)
+	{
+		Vertex* v = this->find_vertex(value);
+		if (v)
+		{
+			this->remove_vertex(v);
+		}
+	}
+	/*
 	void remove_edge(T from, T to)
 	{
 		Vertex* pfv = this->find_from_vertex(from);
@@ -191,11 +243,13 @@ public:
 	
 	void remove_vertex(T v)
 	{
+		Vertex* rem = nullptr;
 		for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
 		{
 			Vertex* pfv = *it;
 			if (pfv->value == v)
 			{
+				rem = *it;
 				this->from_vertices->erase(it);
 			}
 			else
@@ -205,6 +259,7 @@ public:
 					Vertex* ptv = *it2;
 					if (ptv->value == v)
 					{
+						rem = *it2;
 						pfv->to_vertices->erase(it2);
 					}
 				}
@@ -214,27 +269,119 @@ public:
 				}
 			}
 		}
+		if (rem) delete rem;
 	}
-	
-	size_t size()
+	*/
+
+private:
+
+	void remove_edge(Vertex* from, Vertex* to)
 	{
-		MySet<Vertex*> all;
+		for (typename MySet<Vertex*>::Iterator it = from->to_vertices->begin(); it != from->to_vertices->end(); it++)
+		{
+			Vertex* curr = *it;
+			if (curr == to)
+			{
+				from->to_vertices->erase(it);
+				Vertex* v = this->find_vertex(curr->value);
+				if (!v)
+				{
+					delete curr;
+				}
+				break;
+			}
+		}
+		if (from->to_vertices->empty())
+		{
+			Vertex* v = this->find_to_vertex(from->value);
+			if (!v)
+			{
+				for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
+				{
+					if (*it == from)
+					{
+						this->from_vertices->erase(it);
+						break;
+					}
+				}
+				delete from;
+			}
+		}
+	}
+
+	void remove_vertex(Vertex* v)
+	{
 		for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
 		{
-			Vertex* v = *it;
-			if (!all.contains(v))
+			Vertex* curr = *it;
+			if (this->from_vertex_contains_to_vertex(curr->value, v->value))
 			{
-				all.add(v);
+				this->remove_edge(curr, v);
 			}
-			for (typename MySet<Vertex*>::Iterator it2 = v->to_vertices->begin(); it2 != v->to_vertices->end(); it2++)
+		}
+
+		for (typename MySet<Vertex*>::Iterator it = v->to_vertices->begin(); it != v->to_vertices->end(); it++)
+		{
+			size_t sz = v->to_vertices->size();
+			this->remove_edge(v, *it);
+			if (sz == 1)
 			{
-				if (!all.contains(*it2))
+				break;
+			}
+		}
+		/*
+		const size_t n = this->size() + 1;
+		MySet<Vertex*>* for_delete = new MySet<Vertex*>(n);
+
+		Vertex* to = this->find_to_vertex(v->value);
+		if (to)
+		{
+			for (typename MySet<Vertex*>::Iterator it = this->from_vertices->begin(); it != this->from_vertices->end(); it++)
+			{
+				Vertex* curr_from = *it;
+				for (typename MySet<Vertex*>::Iterator it2 = curr_from->to_vertices->begin(); it2 != curr_from->to_vertices->end(); it2++)
 				{
-					all.add(*it2);
+					if (*it == v)
+					{
+						curr_from->to_vertices->erase(it);
+						break;
+					}
+				}
+
+				if (curr_from->to_vertices->empty())
+				{
+					Vertex* is_to = this->find_to_vertex(curr_from->value);
+					if (!is_to)
+					{
+						for_delete->add(curr_from);
+					}
 				}
 			}
 		}
-		return all.size();
+
+		Vertex* from = this->find_from_vertex(v->value);
+		if (from)
+		{
+			for (typename MySet<Vertex*>::Iterator it = from->to_vertices->begin(); it != from->to_vertices->end(); it++)
+			{
+				Vertex* curr_to = *it;
+				from->to_vertices->erase(it);
+				Vertex* curr_exist = this->find_vertex(curr_to->value);
+				if (!curr_exist)
+				{
+					for_delete->add(curr_to);
+				}
+			}
+		}
+		for_delete->add(v);
+
+		for (typename MySet<Vertex*>::Iterator it = for_delete->begin(); it != for_delete->end(); it++)
+		{
+			Vertex* curr = *it;
+			for_delete->erase(it);
+			delete curr;
+		}
+		*/
 	}
 
 public:
@@ -308,7 +455,6 @@ public:
 			}
 		}
 		*(seq + i) = nullptr;
-
 		return Iterator(seq);
 	}
 
@@ -345,7 +491,7 @@ public:
 
 	Iterator end()
 	{
-		Vertex** seq = new Vertex* [1];
+		Vertex** seq = new Vertex*[1];
 		*seq = nullptr;
 		return Iterator(seq);
 	}

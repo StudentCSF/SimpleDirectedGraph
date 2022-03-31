@@ -21,8 +21,8 @@ public:
 
 	~MyStack()
 	{
-		delete[] ptr;
-		delete[] head;
+		delete ptr;
+		delete head;
 	}
 
 	void push(T value)

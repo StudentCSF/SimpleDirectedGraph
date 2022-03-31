@@ -143,7 +143,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DirectedGraph.h" />
     <ClInclude Include="MyDirectedGraph.h" />
     <ClInclude Include="MyQueue.h" />
     <ClInclude Include="MySet.h" />
