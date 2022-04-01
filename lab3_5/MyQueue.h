@@ -1,11 +1,11 @@
 #pragma once
 
-
 template<class T>
 class MyQueue
 {
 
 private:
+	T* init;
 	T* head;
 	T* ptr;
 
@@ -14,14 +14,14 @@ public:
 
 	MyQueue(const int capacity)
 	{
-		this->ptr = new T[capacity];
-		this->head = ptr;
+		this->init = new T[capacity];
+		this->ptr = init;
+		this->head = init;
 	}
 
 	~MyQueue()
 	{
-		delete head;
-		delete ptr;
+		delete init;
 	}
 
 	void push(T v)

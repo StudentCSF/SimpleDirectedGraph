@@ -9,9 +9,7 @@ private:
 	T* ptr;
 
 public:
-	MyStack() : MyStack(1024)
-	{
-	}
+	MyStack() : MyStack(1024) {}
 
 	MyStack(const int capacity)
 	{
@@ -22,7 +20,6 @@ public:
 	~MyStack()
 	{
 		delete ptr;
-		delete head;
 	}
 
 	void push(T value)
@@ -33,13 +30,9 @@ public:
 
 	T pop()
 	{
-		if (!this->empty())
-		{
-			T res = this->top();
-			this->head--;
-			return res;
-		}
-		return this->top();
+		T res = this->top();
+		this->head--;
+		return res;
 	}
 
 	T top()

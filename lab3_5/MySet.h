@@ -97,9 +97,9 @@ public:
 			return *it1.curr != *it2.curr;
 		}
 
-		Iterator& operator=(const Iterator& src)
+		Iterator operator=(const Iterator& src)
 		{
-			return Iterator(src->curr);
+			return Iterator(src.curr);
 		}
 	};
 
@@ -114,7 +114,6 @@ public:
 		T tmp = *(this->ptr + add);
 		return Iterator(&tmp);
 	}
-
 	
 	Iterator erase(Iterator where_)
 	{
@@ -138,5 +137,17 @@ public:
 		for (; i < ind; it++, i++) {}
 		return it;
 	}
-	
+
+	Iterator find(T value)
+	{
+		Iterator radar = this->begin();
+		while (radar != this->end())
+		{
+			if (*radar == value) {
+				return radar;
+			}
+			radar++;
+		}
+		return this->end();
+	}
 };
