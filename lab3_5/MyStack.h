@@ -5,21 +5,21 @@ class MyStack
 {
 
 private:
+	T* init;
 	T* head;
-	T* ptr;
 
 public:
 	MyStack() : MyStack(1024) {}
 
 	MyStack(const int capacity)
 	{
-		this->ptr = new T[capacity];
-		this->head = ptr;
+		this->init = new T[capacity];
+		this->head = init;
 	}
 
 	~MyStack()
 	{
-		delete ptr;
+		delete[] init;
 	}
 
 	void push(T value)
@@ -42,6 +42,6 @@ public:
 
 	bool empty()
 	{
-		return this->head == this->ptr;
+		return this->head == this->init;
 	}
 };

@@ -21,7 +21,7 @@ public:
 
 	~MyQueue()
 	{
-		delete init;
+		delete[] init;
 	}
 
 	void push(T v)

@@ -7,7 +7,6 @@ class MySet
 private:
 	T* ptr;
 	size_t sz;
-
 	size_t capacity;
 
 public:
@@ -15,14 +14,14 @@ public:
 
 	MySet(const size_t capacity)
 	{
-		this->capacity = capacity;
+		this->capacity = capacity + 1;
 		this->ptr = new T[this->capacity];
 		this->sz = 0;
 	}
 
 	~MySet()
 	{
-		delete ptr;
+		delete[] ptr;
 	}
 
 	void add(T v)
@@ -110,43 +109,35 @@ public:
 
 	Iterator end()
 	{
-		const int add = this->size() + 1;
+		const int add = this->size();
 		T tmp = *(this->ptr + add);
 		return Iterator(&tmp);
 	}
-	
+
 	Iterator erase(Iterator where_)
 	{
-		T* new_ptr = new T[this->capacity];
-		unsigned int i = 0;
-		for (Iterator it = this->begin(); it != where_; it++, i++)
-		{
-			*(new_ptr + i) = *it;
-
-		}
-		unsigned int ind = i;
-		where_++;
-		for (Iterator it = where_; it != this->end(); it++, i++)
-		{
-			*(new_ptr + i) = *it;
-		}
-		sz--;
-		this->ptr = new_ptr;
-		i = 0;
+		unsigned int i = 0, ind;
 		Iterator it = this->begin();
-		for (; i < ind; it++, i++) {}
+		for (; it != where_; it++, i++) {}
+		ind = i;
+		for (; i < this->sz; i++)
+		{
+			*(ptr + i) = *(ptr + i + 1);
+		}
+		this->sz--;
+		it = this->begin();
+		i = 0;
+		for (; i < ind; i++, it++) {}
 		return it;
 	}
 
 	Iterator find(T value)
 	{
-		Iterator radar = this->begin();
-		while (radar != this->end())
+		for (Iterator radar = this->begin(); radar != this->end(); radar++)
 		{
 			if (*radar == value) {
 				return radar;
 			}
-			radar++;
 		}
 		return this->end();
 	}
