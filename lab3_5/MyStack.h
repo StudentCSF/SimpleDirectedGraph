@@ -9,17 +9,17 @@ private:
 	T* head;
 
 public:
-	MyStack() : MyStack(1024) {}
+	MyStack() : MyStack(1023) {}
 
 	MyStack(const int capacity)
 	{
-		this->init = new T[capacity];
-		this->head = init;
+		this->init = new T[capacity + 1];
+		this->head = this->init;
 	}
 
 	~MyStack()
 	{
-		delete[] init;
+		delete[] this->init;
 	}
 
 	void push(T value)

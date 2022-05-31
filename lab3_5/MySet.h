@@ -7,29 +7,27 @@ class MySet
 private:
 	T* ptr;
 	size_t sz;
-	size_t capacity;
 
-public:
-	MySet() : MySet(1024) {}
+public: 
+	MySet() : MySet(1023) {}
 
 	MySet(const size_t capacity)
 	{
-		this->capacity = capacity + 1;
-		this->ptr = new T[this->capacity];
+		this->ptr = new T[capacity + 1];
 		this->sz = 0;
 	}
 
 	~MySet()
 	{
-		delete[] ptr;
+		delete[] this->ptr;
 	}
 
 	void add(T v)
 	{
 		if (!this->contains(v))
 		{
-			*(ptr + sz) = v;
-			sz++;
+			*(this->ptr + this->sz) = v;
+			this->sz++;
 		}
 	}
 
@@ -37,7 +35,7 @@ public:
 	{
 		for (unsigned int i = 0; i < this->sz; i++)
 		{
-			if (*(ptr + i) == v)
+			if (*(this->ptr + i) == v)
 			{
 				return true;
 			}
@@ -122,7 +120,7 @@ public:
 		ind = i;
 		for (; i < this->sz; i++)
 		{
-			*(ptr + i) = *(ptr + i + 1);
+			*(this->ptr + i) = *(this->ptr + i + 1);
 		}
 		this->sz--;
 		it = this->begin();

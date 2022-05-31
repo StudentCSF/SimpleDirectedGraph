@@ -10,36 +10,36 @@ private:
 	T* ptr;
 
 public:
-	MyQueue() : MyQueue(1024){}
+	MyQueue() : MyQueue(1023){}
 
 	MyQueue(const int capacity)
 	{
-		this->init = new T[capacity];
+		this->init = new T[capacity + 1];
 		this->ptr = init;
 		this->head = init;
 	}
 
 	~MyQueue()
 	{
-		delete[] init;
+		delete[] this->init;
 	}
 
 	void push(T v)
 	{
-		*ptr = v;
-		ptr++;
+		*this->ptr = v;
+		this->ptr++;
 	}
 
 	T pop()
 	{
-		T res = *head;
-		head++;
+		T res = this->top();
+		this->head++;
 		return res;
 	}
 
 	T top()
 	{
-		return *head;
+		return *this->head;
 	}
 
 	bool empty()
